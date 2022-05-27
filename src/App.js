@@ -1,25 +1,26 @@
 import React from 'react';
-import Main from './Main/Main';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Main from './Pages/Main/Main';
+import Courses from './Pages/Courses/Courses';
 
-const theme = extendTheme({
-  shadows: {
-    'solid-left':
-      '0px 2px 0px 0px, -1.5px 1.5px 0px 0px, 0px 0px 0px 0px, 0px 0px 0px 0px, -3px 3px 0px 0px',
-    'solid-off': '0px 0px 0px 0px',
-  },
-});
+import theme from './styles/theme';
+import store from './store/store';
+
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-        </Routes>
-      </BrowserRouter>
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" exact element={<Main />} />
+            <Route path="/courses" element={<Courses />} />
+          </Routes>
+        </BrowserRouter>
+      </ChakraProvider>
+    </Provider>
   );
 }
 
