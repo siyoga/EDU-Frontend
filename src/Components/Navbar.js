@@ -26,9 +26,10 @@ function Navbar() {
   function handleChangeSearchType() {
     if (searchType === 'Курс') {
       dispatch(switchToAuthor());
-    } else {
-      dispatch(switchToCourse());
+      return;
     }
+
+    dispatch(switchToCourse());
   }
 
   return (
@@ -132,7 +133,15 @@ function Navbar() {
           />
         </InputGroup>
 
-        <Button variant="primary" px="2.8vw" fontSize="lg" borderRadius={20}>
+        <Button
+          variant="primary"
+          px="2.8vw"
+          fontSize="lg"
+          borderRadius={20}
+          onClick={() => {
+            navigate(`/register`);
+          }}
+        >
           Регистрация
         </Button>
       </Box>
