@@ -1,16 +1,23 @@
-import { Button, FormControl, Center, Box, Link } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { Formik, Form } from 'formik';
-import LoginField from './LoginField';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import Cookies from 'universal-cookie';
+import { useState } from 'react';
+
+import { Button, FormControl, Center, Box, Link } from '@chakra-ui/react';
+import { Formik, Form } from 'formik';
+
 import { host } from '../../../index';
+import LoginField from './LoginField';
+
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function FormField() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState({ login: '', password: '' });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function handleLogin() {
@@ -20,7 +27,10 @@ function FormField() {
           username: username,
           password: password,
         })
-        .then(() => {
+        .then(response => {
+          const cookies = new Cookies();
+          cookies.set('user', response.data.data.tokenPair.token);
+
           navigate('/courses');
         })
         .catch(error => {

@@ -11,15 +11,10 @@ import {
 import '@fontsource/jost';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  setContent,
-  switchToAuthor,
-  switchToCourse,
-} from '../store/slices/searchSlice';
+import { setContent, switchToAuthor } from '../store/slices/searchSlice';
 
 function Navbar() {
   const searchType = useSelector(state => state.search.type);
-  const searchContent = useSelector(state => state.search.content);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,8 +23,6 @@ function Navbar() {
       dispatch(switchToAuthor());
       return;
     }
-
-    dispatch(switchToCourse());
   }
 
   return (
@@ -124,10 +117,8 @@ function Navbar() {
             }}
             onKeyDown={e => {
               if (e.key === 'Enter') {
-                if (window.location.pathname !== '/courses') {
-                  navigate(`/courses`);
-                  return;
-                }
+                navigate(`/courses`);
+                return;
               }
             }}
           />

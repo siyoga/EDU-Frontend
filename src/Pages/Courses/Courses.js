@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { Box, Button, Center, Image, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+import Cookies from 'universal-cookie';
 import Navbar from '../../Components/Navbar';
 import testPic from '../../pictures/gosuslugi.jpg';
 import { host } from '../../index';
@@ -12,46 +14,69 @@ import '@fontsource/jost';
 function Courses() {
   const searchType = useSelector(state => state.search.type);
   const searchContent = useSelector(state => state.search.content);
+  const user = useSelector(state => state.user);
+
   const [courses, setCourses] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(searchType, searchContent);
     loadCourses();
-  }, []);
+  }, [searchContent]);
 
   function loadCourses() {
     if (searchType === 'Автор') {
       axios
         .get(`${host}/course/get/author/${searchContent}`)
         .then(response => {
+          console.log(response);
           setCourses(response.data.data);
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          axios
+            .get(`${host}/course/get/all`)
+            .then(response => {
+              setCourses(response.data.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         });
       return;
     }
 
-    if (searchType === 'Курс' && searchContent !== '') {
+    if (searchType === 'Курс') {
       axios
         .get(`${host}/course/get/name/${searchContent}`)
         .then(response => {
+          console.log(response);
           setCourses(response.data.data);
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          axios
+            .get(`${host}/course/get/all`)
+            .then(response => {
+              setCourses(response.data.data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
         });
       return;
     }
+  }
 
-    axios
-      .get(`${host}/course/get/all`)
-      .then(response => {
-        setCourses(response.data.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  function checkCourse(userCourses, courseId) {
+    if (userCourses === null) {
+      return false;
+    }
+
+    if (userCourses.indexOf(courseId) === -1) {
+      return true;
+    }
+  }
+
+  function handleSubscribe(courseId) {
+    navigate(`/player/${courseId}`);
   }
 
   return (
@@ -97,8 +122,16 @@ function Courses() {
                       justifyContent="space-between"
                       mt="20px"
                     >
-                      <Button variant="primary" borderRadius={20}>
-                        Записаться
+                      <Button
+                        variant="primary"
+                        borderRadius={20}
+                        onClick={() => {
+                          handleSubscribe(element.id);
+                        }}
+                      >
+                        {checkCourse(user.courses, element.id)
+                          ? 'Перейти'
+                          : 'Записаться'}
                       </Button>
                       <Box
                         display="flex"

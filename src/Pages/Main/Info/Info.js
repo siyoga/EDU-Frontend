@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Box, Button, Center, Image, Text } from '@chakra-ui/react';
 import { useState, Fragment } from 'react';
@@ -8,10 +8,16 @@ import stockImage2 from '../../../pictures/stock2.jpg';
 import stockImage3 from '../../../pictures/stock3.jpg';
 
 import '@fontsource/jost';
+import { useSelector } from 'react-redux';
 
 function Info() {
   const pictures = [stockImage1, stockImage2, stockImage3];
   const [pictureNum, setPictureNum] = useState(0);
+  const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   return (
     <Fragment>

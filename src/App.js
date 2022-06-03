@@ -1,30 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Main from './Pages/Main/Main';
 import Courses from './Pages/Courses/Courses';
 import Register from './Pages/Register/Register';
 import Login from './Pages/Login/Login';
+import Player from './Pages/Player/Player';
+import Cookies from 'universal-cookie';
 
+import axios from 'axios';
 import theme from './styles/theme';
-import store from './store/store';
 
-import { Provider } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { host } from './index';
+import { login } from './store/slices/userSlice';
 
 function App() {
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+
+  const userId = cookies.get('user');
+  useEffect(() => {
+    axios
+      .get(`${host}/user/get`, {
+        headers: { Authorization: `Bearer ${userId}` },
+      })
+      .then(response => {
+        dispatch(
+          login({
+            username: response.data.data.user.username,
+            email: response.data.data.user.email,
+            courses: response.data.data.user.courses,
+          })
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [user]);
+
   return (
-    <Provider store={store}>
-      <ChakraProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" exact element={<Main />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
-      </ChakraProvider>
-    </Provider>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" exact element={<Main />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/player/:courseId" element={<Player />} />
+        </Routes>
+      </BrowserRouter>
+    </ChakraProvider>
   );
 }
 

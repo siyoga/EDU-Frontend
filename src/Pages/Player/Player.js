@@ -1,9 +1,9 @@
 import { Box, Center } from '@chakra-ui/react';
-
 import Navbar from '../../Components/Navbar';
-import FormField from './Form/FormField';
+import PlayerComponent from './Components/PlayerComponent';
+import InfoComponent from './Components/InfoComponent';
 
-function Register() {
+function Player() {
   return (
     <Center>
       <Box
@@ -13,10 +13,11 @@ function Register() {
         width="90%"
       >
         <Navbar />
-        <FormField />
+        <PlayerComponent />
+        <InfoComponent />
       </Box>
     </Center>
   );
 }
 
-export default Register;
+export default Player;
