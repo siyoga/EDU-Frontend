@@ -1,5 +1,4 @@
 import { Box, Center } from '@chakra-ui/react';
-
 import Navbar from '../../Components/Navbar';
 import FormField from './Form/FormField';
 
