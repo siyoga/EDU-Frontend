@@ -1,10 +1,12 @@
 import { Box, Center } from '@chakra-ui/react';
 import Info from './Info/Info';
 import Navbar from '../../Components/Navbar';
+import Faq from '../../Components/Faq';
+import Footer from '../../Components/Footer';
 
 function Main() {
   return (
-    <Center>
+    <Center flexDirection="column">
       <Box
         justifyContent="center"
         flexDirection="column"
@@ -13,7 +15,9 @@ function Main() {
       >
         <Navbar />
         <Info />
+        <Faq />
       </Box>
+      <Footer />
     </Center>
   );
 }

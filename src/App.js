@@ -14,6 +14,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { host } from './index';
 import { login } from './store/slices/userSlice';
+import UserCourses from './Pages/Profile/Components/UserCourses';
+import Profile from './Pages/Profile/Profile';
 
 function App() {
   const cookies = new Cookies();
@@ -22,22 +24,24 @@ function App() {
 
   const userId = cookies.get('user');
   useEffect(() => {
-    axios
-      .get(`${host}/user/get`, {
-        headers: { Authorization: `Bearer ${userId}` },
-      })
-      .then(response => {
-        dispatch(
-          login({
-            username: response.data.data.user.username,
-            email: response.data.data.user.email,
-            courses: response.data.data.user.courses,
-          })
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    if (userId !== undefined) {
+      axios
+        .get(`${host}/user/get`, {
+          headers: { Authorization: `Bearer ${userId}` },
+        })
+        .then(response => {
+          dispatch(
+            login({
+              username: response.data.data.user.username,
+              email: response.data.data.user.email,
+              courses: response.data.data.user.courses,
+            })
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }, [user]);
 
   return (
@@ -49,6 +53,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/player/:courseId" element={<Player />} />
+          <Route path="/account/:username" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

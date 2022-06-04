@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Image,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -8,13 +9,16 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import '@fontsource/jost';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setContent, switchToAuthor } from '../store/slices/searchSlice';
 
+import logo from '../pictures/logo.png';
+import '@fontsource/jost';
+
 function Navbar() {
   const searchType = useSelector(state => state.search.type);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,8 +40,22 @@ function Navbar() {
       borderRadius={20}
       mt="1vw"
     >
-      <Text>logo</Text>
-      <Box display="flex" flex-direction="row">
+      <Box display="flex" align="start" flexDirection="row">
+        <Image src={logo} boxSize="40px" mr="1vw" />
+        <Box
+          display="flex"
+          flexDirection="row"
+          fontSize="2xl"
+          textAlign="center"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Text color="#F58220">Old</Text>
+          <Text color="#00B4EE">{'&'}</Text>
+          <Text color="#003563">Study</Text>
+        </Box>
+      </Box>
+      <Box display="flex" flexDirection="row">
         <Box
           display="flex"
           alignItems="center"
@@ -124,17 +142,31 @@ function Navbar() {
           />
         </InputGroup>
 
-        <Button
-          variant="primary"
-          px="2.8vw"
-          fontSize="lg"
-          borderRadius={20}
-          onClick={() => {
-            navigate(`/register`);
-          }}
-        >
-          Регистрация
-        </Button>
+        {user.username === '' ? (
+          <Button
+            variant="primary"
+            px="2.8vw"
+            fontSize="lg"
+            borderRadius={20}
+            onClick={() => {
+              navigate(`/register`);
+            }}
+          >
+            Регистрация
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            px="2.8vw"
+            fontSize="lg"
+            borderRadius={20}
+            onClick={() => {
+              navigate(`/account/${user.username}`);
+            }}
+          >
+            {user.username}
+          </Button>
+        )}
       </Box>
     </Box>
   );

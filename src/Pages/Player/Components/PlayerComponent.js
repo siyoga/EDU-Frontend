@@ -1,7 +1,7 @@
 import { AspectRatio, Box, Button, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { host } from '../../../index';
 import '@fontsource/jost';
@@ -17,6 +17,7 @@ function PlayerComponent() {
   const cookies = new Cookies();
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector(state => state.user);
   const userId = cookies.get('user');
 
@@ -41,19 +42,16 @@ function PlayerComponent() {
         { headers: { Authorization: `Bearer ${userId}` } }
       )
       .then(response => {
-        console.log(response.data.data);
-        //dispatch(updateCourses(response.data.data));
+        dispatch(updateCourses(response.data.data.user.courses));
       });
   }
 
   function checkCourse(userCourses, courseId) {
-    if (userCourses === null) {
+    if (userCourses.indexOf(courseId) !== -1) {
       return false;
     }
 
-    if (userCourses.indexOf(courseId) === -1) {
-      return true;
-    }
+    return true;
   }
 
   function loadVideos() {
@@ -92,11 +90,10 @@ function PlayerComponent() {
         display="flex"
         flexDirection="row"
         justifyContent="center"
-        width="100%"
         ml="2vw"
       >
         <Box display="flex" flexDirection="column" alignItems="center">
-          {checkCourse(params.courseId, user.courses) && (
+          {checkCourse(user.courses, params.courseId) && (
             <Box
               position="absolute"
               height="60%"
@@ -108,18 +105,33 @@ function PlayerComponent() {
               justifyContent="center"
               alignItems="center"
             >
-              <Button
-                variant="primary"
-                width="-webkit-fit-content"
-                fontSize="2xl"
-                py={4}
-                px={6}
-                onClick={() => {
-                  subscribeOnCourse();
-                }}
-              >
-                Записаться
-              </Button>
+              {user.username === '' ? (
+                <Button
+                  variant="primary"
+                  width="-webkit-fit-content"
+                  fontSize="2xl"
+                  py={4}
+                  px={6}
+                  onClick={() => {
+                    navigate(`/login`);
+                  }}
+                >
+                  Записаться
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  width="-webkit-fit-content"
+                  fontSize="2xl"
+                  py={4}
+                  px={6}
+                  onClick={() => {
+                    subscribeOnCourse();
+                  }}
+                >
+                  Записаться
+                </Button>
+              )}
             </Box>
           )}
           {courseVideos.map(element => {
@@ -130,10 +142,10 @@ function PlayerComponent() {
                 display="flex"
                 flexDirection="column"
                 justifyContent="start"
-                width="17vw"
+                width="15vw"
                 mt="1vh"
-                py={2}
-                px={3}
+                py="1vh"
+                px="2vw"
                 border="2px"
                 borderColor="#FCE699"
                 fontFamily="Jost"

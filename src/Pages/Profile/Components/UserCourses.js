@@ -1,60 +1,41 @@
 import axios from 'axios';
-import { Box, Button, Center, Image, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import testPic from '../../../pictures/gosuslugi.jpg';
 
-import testPic from '../../pictures/gosuslugi.jpg';
-import { host } from '../../index';
+import { Box, Button, Image, Text } from '@chakra-ui/react';
+import { Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { host } from '../../../index';
 
 import '@fontsource/jost';
 
-export default function MyCourses() {
-  const searchType = useSelector(state => state.search.type);
-  const searchContent = useSelector(state => state.search.content);
+export default function UserCourses() {
   const [courses, setCourses] = useState([]);
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
-    console.log(searchType, searchContent);
     loadCourses();
   }, []);
 
   function loadCourses() {
-    if (searchType === 'Автор') {
+    const userCourses = [];
+
+    user.courses.forEach(element => {
       axios
-        .get(`${host}/course/get/author/${searchContent}`)
+        .get(`${host}/course/get/id/${element}`)
         .then(response => {
-          setCourses(response.data.data);
+          userCourses.push(response.data.data);
         })
         .catch(error => {
           console.log(error);
         });
-      return;
-    }
+    });
 
-    if (searchType === 'Курс' && searchContent !== '') {
-      axios
-        .get(`${host}/course/get/name/${searchContent}`)
-        .then(response => {
-          setCourses(response.data.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      return;
-    }
-
-    axios
-      .get(`${host}/course/get/all`)
-      .then(response => {
-        setCourses(response.data.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    setCourses(userCourses);
   }
 
   return (
-    <>
+    <Box mt="6vh">
       {courses.map(element => {
         return (
           <Box
@@ -105,6 +86,6 @@ export default function MyCourses() {
           </Box>
         );
       })}
-    </>
+    </Box>
   );
 }

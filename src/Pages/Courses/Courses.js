@@ -66,13 +66,11 @@ function Courses() {
   }
 
   function checkCourse(userCourses, courseId) {
-    if (userCourses === null) {
+    if (userCourses.indexOf(courseId) !== -1) {
       return false;
     }
 
-    if (userCourses.indexOf(courseId) === -1) {
-      return true;
-    }
+    return true;
   }
 
   function handleSubscribe(courseId) {
@@ -130,8 +128,8 @@ function Courses() {
                         }}
                       >
                         {checkCourse(user.courses, element.id)
-                          ? 'Перейти'
-                          : 'Записаться'}
+                          ? 'Записаться'
+                          : 'Перейти'}
                       </Button>
                       <Box
                         display="flex"

@@ -11,6 +11,7 @@ import LoginField from './LoginField';
 
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../../store/slices/userSlice';
 
 function FormField() {
   const [username, setUsername] = useState('');
@@ -30,6 +31,24 @@ function FormField() {
         .then(response => {
           const cookies = new Cookies();
           cookies.set('user', response.data.data.tokenPair.token);
+          const userId = cookies.get('user');
+
+          axios
+            .get(`${host}/user/get`, {
+              headers: { Authorization: `Bearer ${userId}` },
+            })
+            .then(response => {
+              dispatch(
+                login({
+                  username: response.data.data.user.username,
+                  email: response.data.data.user.email,
+                  courses: response.data.data.user.courses,
+                })
+              );
+            })
+            .catch(error => {
+              console.log(error);
+            });
 
           navigate('/courses');
         })
