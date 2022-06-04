@@ -1,10 +1,11 @@
 import { Box, Center } from '@chakra-ui/react';
+import Footer from '../../Components/Footer';
 import Navbar from '../../Components/Navbar';
 import FormField from './Form/FormField';
 
 function Register() {
   return (
-    <Center>
+    <Center flexDirection="column">
       <Box
         justifyContent="center"
         flexDirection="column"
@@ -14,6 +15,7 @@ function Register() {
         <Navbar />
         <FormField />
       </Box>
+      <Footer />
     </Center>
   );
 }

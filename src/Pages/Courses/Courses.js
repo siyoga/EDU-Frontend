@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Cookies from 'universal-cookie';
 import Navbar from '../../Components/Navbar';
-import testPic from '../../pictures/gosuslugi.jpg';
+import testPic from '../../pictures/course.jpg';
 import { host } from '../../index';
 
 import '@fontsource/jost';
@@ -78,7 +77,7 @@ function Courses() {
   }
 
   return (
-    <Center>
+    <Center flexDirection="column">
       <Box justifyContent="center" flexDirection="column" width="90%">
         <Navbar />
         <Center>

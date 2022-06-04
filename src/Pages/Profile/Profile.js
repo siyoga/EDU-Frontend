@@ -6,10 +6,11 @@ import Navbar from '../../Components/Navbar';
 import UserCourses from '../Profile/Components/UserCourses';
 
 import '@fontsource/jost';
+import Footer from '../../Components/Footer';
 
 export default function Profile() {
   return (
-    <Center>
+    <Center flexDirection="column">
       <Box
         display="flex"
         flexDirection="column"
@@ -21,6 +22,7 @@ export default function Profile() {
         <PersonalInfo />
         <UserCourses />
       </Box>
+      <Footer />
     </Center>
   );
 }
