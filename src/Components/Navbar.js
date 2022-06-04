@@ -40,7 +40,14 @@ function Navbar() {
       borderRadius={20}
       mt="1vw"
     >
-      <Box display="flex" align="start" flexDirection="row">
+      <Box
+        display="flex"
+        align="start"
+        flexDirection="row"
+        onClick={() => {
+          navigate('/');
+        }}
+      >
         <Image src={logo} boxSize="40px" mr="1vw" />
         <Box
           display="flex"
